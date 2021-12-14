@@ -27,7 +27,7 @@ export default class HelloWorldScene extends Phaser.Scene {
     // debugDraw(wallsLayer, this);
     // debugDraw(groundLayer, this);
 
-    this.rogue = this.physics.add.sprite(250, 50, 'rogue', 'idleFront-1.png');
+    this.rogue = this.physics.add.sprite(73, 50, 'rogue', 'idleFront-1.png');
     this.rogue.body.setSize(this.rogue.width * 0.4, this.rogue.height * 0.6);
 
     // Animations:
