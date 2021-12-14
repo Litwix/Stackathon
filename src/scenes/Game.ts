@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { debugDraw } from '../utils/debug';
 import { createRogueAnims } from '../animations/RogueAnims';
 import { createSlimeAnims } from '../animations/SlimeAnims';
+import Slime from '../characters/Slime';
 
 export default class HelloWorldScene extends Phaser.Scene {
   constructor() {
@@ -25,28 +26,34 @@ export default class HelloWorldScene extends Phaser.Scene {
     wallsLayer.setCollisionByProperty({ collides: true });
     groundLayer.setCollisionByProperty({ collides: true });
 
-    // Used to debug collisions:
+    // DEBUGGING COLLISIONS:
     // debugDraw(wallsLayer, this);
     // debugDraw(groundLayer, this);
 
-    // Characters:
+    // ANIMATIONS:
+    createRogueAnims(this.anims);
+    // this.rogue.anims.play('rogue-idle-front');
+    createSlimeAnims(this.anims);
+
+    // CHARACTERS:
+    // Rogue Character:
     this.rogue = this.physics.add.sprite(73, 50, 'rogue', 'idleFront-1.png');
     this.rogue.body.setSize(this.rogue.width * 0.4, this.rogue.height * 0.6);
-
-    const slime = this.physics.add.sprite(150, 150, 'slime', 'idle-1.png');
-
-    // Animations:
-    createRogueAnims(this.anims);
     this.rogue.anims.play('rogue-idle-front');
 
-    createSlimeAnims(this.anims);
-    slime.anims.play('slime-idle');
+    // Slime Group:
+    const slimes = this.physics.add.group({ classType: Slime });
+    const slime1 = slimes.get(150, 150, 'slime');
+    slime1.body.setSize(slime1.width * 0.5, slime1.height * 0.5); // will have to refactor this later
 
-    // Colliders:
+    // COLLIDERS:
     this.physics.add.collider(this.rogue, wallsLayer);
     this.physics.add.collider(this.rogue, groundLayer);
+    this.physics.add.collider(slimes, wallsLayer);
+    this.physics.add.collider(slimes, groundLayer);
+    this.physics.add.collider(this.rogue, slimes);
 
-    // Following Camera:
+    // FOLLOWING CAMERA:
     this.cameras.main.startFollow(this.rogue);
   }
 
