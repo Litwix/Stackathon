@@ -92,6 +92,9 @@ export default class HelloWorldScene extends Phaser.Scene {
     // Colliders:
     this.physics.add.collider(this.rogue, wallsLayer);
     this.physics.add.collider(this.rogue, groundLayer);
+
+    // Following Camera:
+    this.cameras.main.startFollow(this.rogue);
   }
 
   update() {
