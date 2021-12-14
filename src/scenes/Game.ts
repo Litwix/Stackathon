@@ -4,7 +4,7 @@ import { createRogueAnims } from '../animations/RogueAnims';
 import { createSlimeAnims } from '../animations/SlimeAnims';
 import Slime from '../characters/Slime';
 
-export default class HelloWorldScene extends Phaser.Scene {
+export default class Game extends Phaser.Scene {
   constructor() {
     super('game');
   }
@@ -32,7 +32,6 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     // ANIMATIONS:
     createRogueAnims(this.anims);
-    // this.rogue.anims.play('rogue-idle-front');
     createSlimeAnims(this.anims);
 
     // CHARACTERS:
