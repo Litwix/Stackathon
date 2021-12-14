@@ -15,7 +15,7 @@ export default class HelloWorldScene extends Phaser.Scene {
 
   create() {
     const map = this.make.tilemap({ key: 'dungeon01' });
-    const tileset = map.addTilesetImage('dungeon', 'tiles');
+    const tileset = map.addTilesetImage('dungeon', 'dungeons');
 
     const wallsLayer = map.createLayer('Walls', tileset);
     const groundLayer = map.createLayer('Ground', tileset);
