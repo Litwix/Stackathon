@@ -10,7 +10,11 @@ export default class Preloader extends Phaser.Scene {
     this.load.tilemapTiledJSON('dungeon01', 'dungeons/dungeon-01.json');
 
     this.load.atlas('rogue', 'character/Rogue.png', 'character/Rogue.json');
-    this.load.atlas('slime', 'slime/Slime.png', 'slime/Slime.json');
+    this.load.atlas(
+      'slime',
+      'characters/slime/Slime.png',
+      'characters/slime/Slime.json'
+    );
   }
 
   create() {
