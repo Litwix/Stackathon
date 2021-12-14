@@ -1,5 +1,7 @@
 import Phaser from 'phaser';
 import { debugDraw } from '../utils/debug';
+import { createRogueAnims } from '../animations/RogueAnims';
+import { createSlimeAnims } from '../animations/SlimeAnims';
 
 export default class HelloWorldScene extends Phaser.Scene {
   constructor() {
@@ -27,59 +29,18 @@ export default class HelloWorldScene extends Phaser.Scene {
     // debugDraw(wallsLayer, this);
     // debugDraw(groundLayer, this);
 
+    // Characters:
     this.rogue = this.physics.add.sprite(73, 50, 'rogue', 'idleFront-1.png');
     this.rogue.body.setSize(this.rogue.width * 0.4, this.rogue.height * 0.6);
 
+    const slime = this.physics.add.sprite(150, 150, 'slime', 'idle-1.png');
+
     // Animations:
-    this.anims.create({
-      key: 'rogue-idle-front',
-      frames: this.anims.generateFrameNames('rogue', {
-        start: 1,
-        end: 8,
-        prefix: 'idleFront-',
-        suffix: '.png',
-      }),
-      repeat: -1,
-      frameRate: 10,
-    });
-
-    this.anims.create({
-      key: 'rogue-idle-back',
-      frames: this.anims.generateFrameNames('rogue', {
-        start: 1,
-        end: 8,
-        prefix: 'idleBack-',
-        suffix: '.png',
-      }),
-      repeat: -1,
-      frameRate: 10,
-    });
-
-    this.anims.create({
-      key: 'rogue-run-front',
-      frames: this.anims.generateFrameNames('rogue', {
-        start: 1,
-        end: 6,
-        prefix: 'runFront-',
-        suffix: '.png',
-      }),
-      repeat: -1,
-      frameRate: 10,
-    });
-
-    this.anims.create({
-      key: 'rogue-run-back',
-      frames: this.anims.generateFrameNames('rogue', {
-        start: 1,
-        end: 6,
-        prefix: 'runBack-',
-        suffix: '.png',
-      }),
-      repeat: -1,
-      frameRate: 10,
-    });
-
+    createRogueAnims(this.anims);
     this.rogue.anims.play('rogue-idle-front');
+
+    createSlimeAnims(this.anims);
+    slime.anims.play('slime-idle');
 
     // Colliders:
     this.physics.add.collider(this.rogue, wallsLayer);
@@ -87,45 +48,6 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     // Following Camera:
     this.cameras.main.startFollow(this.rogue);
-
-    // Slime Character:
-    const slime = this.physics.add.sprite(150, 150, 'slime', 'idle-1.png');
-    this.anims.create({
-      key: 'slime-idle',
-      frames: this.anims.generateFrameNames('slime', {
-        start: 1,
-        end: 6,
-        prefix: 'idle-',
-        suffix: '.png',
-      }),
-      repeat: -1,
-      frameRate: 8,
-    });
-
-    this.anims.create({
-      key: 'slime-jump',
-      frames: this.anims.generateFrameNames('slime', {
-        start: 1,
-        end: 7,
-        prefix: 'jump-',
-        suffix: '.png',
-      }),
-      repeat: -1,
-      frameRate: 8,
-    });
-
-    this.anims.create({
-      key: 'slime-death',
-      frames: this.anims.generateFrameNames('slime', {
-        start: 1,
-        end: 7,
-        prefix: 'death-',
-        suffix: '.png',
-      }),
-      repeat: -1,
-      frameRate: 8,
-    });
-    slime.anims.play('slime-death');
   }
 
   update() {
