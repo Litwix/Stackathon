@@ -17,8 +17,8 @@ export default class HelloWorldScene extends Phaser.Scene {
     const map = this.make.tilemap({ key: 'dungeon01' });
     const tileset = map.addTilesetImage('dungeon', 'tiles');
 
-    const wallsLayer = map.createStaticLayer('Walls', tileset);
-    const groundLayer = map.createStaticLayer('Ground', tileset);
+    const wallsLayer = map.createLayer('Walls', tileset);
+    const groundLayer = map.createLayer('Ground', tileset);
 
     wallsLayer.setCollisionByProperty({ collides: true });
     groundLayer.setCollisionByProperty({ collides: true });
@@ -87,6 +87,45 @@ export default class HelloWorldScene extends Phaser.Scene {
 
     // Following Camera:
     this.cameras.main.startFollow(this.rogue);
+
+    // Slime Character:
+    const slime = this.physics.add.sprite(150, 150, 'slime', 'idle-1.png');
+    this.anims.create({
+      key: 'slime-idle',
+      frames: this.anims.generateFrameNames('slime', {
+        start: 1,
+        end: 6,
+        prefix: 'idle-',
+        suffix: '.png',
+      }),
+      repeat: -1,
+      frameRate: 8,
+    });
+
+    this.anims.create({
+      key: 'slime-jump',
+      frames: this.anims.generateFrameNames('slime', {
+        start: 1,
+        end: 7,
+        prefix: 'jump-',
+        suffix: '.png',
+      }),
+      repeat: -1,
+      frameRate: 8,
+    });
+
+    this.anims.create({
+      key: 'slime-death',
+      frames: this.anims.generateFrameNames('slime', {
+        start: 1,
+        end: 7,
+        prefix: 'death-',
+        suffix: '.png',
+      }),
+      repeat: -1,
+      frameRate: 8,
+    });
+    slime.anims.play('slime-death');
   }
 
   update() {
