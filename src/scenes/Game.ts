@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { debugDraw } from '../utils/debug';
 
 export default class HelloWorldScene extends Phaser.Scene {
   constructor() {
@@ -23,17 +24,8 @@ export default class HelloWorldScene extends Phaser.Scene {
     groundLayer.setCollisionByProperty({ collides: true });
 
     // Used to debug collisions:
-    const debugGraphics = this.add.graphics().setAlpha(0.7);
-    wallsLayer.renderDebug(debugGraphics, {
-      tileColor: null,
-      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255),
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255),
-    });
-    groundLayer.renderDebug(debugGraphics, {
-      tileColor: null,
-      collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255),
-      faceColor: new Phaser.Display.Color(40, 39, 37, 255),
-    });
+    // debugDraw(wallsLayer, this);
+    // debugDraw(groundLayer, this);
 
     this.rogue = this.physics.add.sprite(250, 50, 'rogue', 'idleFront-1.png');
     this.rogue.body.setSize(this.rogue.width * 0.4, this.rogue.height * 0.6);
