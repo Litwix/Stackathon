@@ -92,36 +92,8 @@ export default class Game extends Phaser.Scene {
       return;
     }
 
-    if (!this.cursors || !this.rogue) {
-      return;
-    }
-
-    const speed = 100;
-    if (this.cursors.left.isDown) {
-      this.facingBack = false;
-      this.rogue.anims.play('rogue-run-front', true);
-      this.rogue.scaleX = -1;
-      this.rogue.body.offset.x = 34;
-      this.rogue.setVelocity(-speed, 0);
-    } else if (this.cursors.right.isDown) {
-      this.facingBack = false;
-      this.rogue.anims.play('rogue-run-front', true);
-      this.rogue.scaleX = 1;
-      this.rogue.body.offset.x = 14;
-      this.rogue.setVelocity(speed, 0);
-    } else if (this.cursors.up.isDown) {
-      this.facingBack = true;
-      this.rogue.anims.play('rogue-run-back', true);
-      this.rogue.setVelocity(0, -speed);
-    } else if (this.cursors.down.isDown) {
-      this.facingBack = false;
-      this.rogue.anims.play('rogue-run-front', true);
-      this.rogue.setVelocity(0, speed);
-    } else {
-      this.facingBack
-        ? this.rogue.anims.play('rogue-idle-back', true)
-        : this.rogue.anims.play('rogue-idle-front', true);
-      this.rogue.setVelocity(0, 0);
+    if (this.rogue) {
+      this.rogue.update(this.cursors);
     }
   }
 }

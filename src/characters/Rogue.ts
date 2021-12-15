@@ -15,6 +15,8 @@ declare global {
 }
 
 export default class Rogue extends Phaser.Physics.Arcade.Sprite {
+  private facingBack = false;
+
   constructor(
     scene: Phaser.Scene,
     x: number,
@@ -24,6 +26,40 @@ export default class Rogue extends Phaser.Physics.Arcade.Sprite {
   ) {
     super(scene, x, y, texture, frame);
     this.anims.play('rogue-idle-front');
+  }
+
+  update(cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
+    if (!cursors) {
+      return;
+    }
+
+    const speed = 100;
+    if (cursors.left.isDown) {
+      this.facingBack = false;
+      this.anims.play('rogue-run-front', true);
+      this.scaleX = -1;
+      this.body.offset.x = 34;
+      this.setVelocity(-speed, 0);
+    } else if (cursors.right.isDown) {
+      this.facingBack = false;
+      this.anims.play('rogue-run-front', true);
+      this.scaleX = 1;
+      this.body.offset.x = 14;
+      this.setVelocity(speed, 0);
+    } else if (cursors.up.isDown) {
+      this.facingBack = true;
+      this.anims.play('rogue-run-back', true);
+      this.setVelocity(0, -speed);
+    } else if (cursors.down.isDown) {
+      this.facingBack = false;
+      this.anims.play('rogue-run-front', true);
+      this.setVelocity(0, speed);
+    } else {
+      this.facingBack
+        ? this.anims.play('rogue-idle-back', true)
+        : this.anims.play('rogue-idle-front', true);
+      this.setVelocity(0, 0);
+    }
   }
 }
 
