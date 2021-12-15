@@ -24,7 +24,7 @@ export default class Rogue extends Phaser.Physics.Arcade.Sprite {
   private facingBack = false;
   private healthState = HealthState.ALIVE;
   private damageTime = 0;
-  private _health = 5;
+  private _health = 3;
 
   constructor(
     scene: Phaser.Scene,

@@ -15,7 +15,7 @@ export default class GameUI extends Phaser.Scene {
     this.hearts.createMultiple({
       key: 'heart-full',
       setXY: { x: 15, y: 15, stepX: 17 },
-      quantity: 5,
+      quantity: 3,
     });
 
     sceneEvents.on('rogue-health-changed', this.handleRogueHealthChanged, this);
