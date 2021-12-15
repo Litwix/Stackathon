@@ -39,7 +39,6 @@ export default class Game extends Phaser.Scene {
     // Rogue Character:
     this.rogue = this.physics.add.sprite(73, 50, 'rogue', 'idleFront-1.png');
     this.rogue.body.setSize(this.rogue.width * 0.4, this.rogue.height * 0.6);
-    this.rogue.anims.play('rogue-idle-front');
 
     // Slime Group:
     const slimes = this.physics.add.group({
