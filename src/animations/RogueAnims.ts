@@ -52,6 +52,19 @@ const createRogueAnims = (anims: Phaser.Animations.AnimationManager) => {
     repeat: -1,
     frameRate: 10,
   });
+
+  // Animation for taking damage:
+  anims.create({
+    key: 'rogue-damage',
+    frames: anims.generateFrameNames('rogue', {
+      start: 1,
+      end: 3,
+      prefix: 'takeDamage-',
+      suffix: '.png',
+    }),
+    repeat: -1,
+    frameRate: 10,
+  });
 };
 
 export { createRogueAnims };

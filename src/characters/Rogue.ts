@@ -14,8 +14,16 @@ declare global {
   }
 }
 
+enum HealthState {
+  ALIVE,
+  DAMAGE,
+  DEAD,
+}
+
 export default class Rogue extends Phaser.Physics.Arcade.Sprite {
   private facingBack = false;
+  private healthState = HealthState.ALIVE;
+  private damageTime = 0;
 
   constructor(
     scene: Phaser.Scene,
@@ -28,7 +36,41 @@ export default class Rogue extends Phaser.Physics.Arcade.Sprite {
     this.anims.play('rogue-idle-front');
   }
 
+  handleDamage(direction: Phaser.Math.Vector2) {
+    if (this.healthState === HealthState.DAMAGE) return;
+    this.setVelocity(direction.x, direction.y);
+    this.setTint(0xff0000);
+    this.healthState = HealthState.DAMAGE;
+    this.damageTime = 0;
+    if (!this.facingBack) {
+      this.anims.play('rogue-damage', true);
+    }
+  }
+
+  preUpdate(t: number, dt: number) {
+    super.preUpdate(t, dt);
+    switch (this.healthState) {
+      case HealthState.ALIVE:
+        break;
+      case HealthState.DAMAGE:
+        this.damageTime += dt;
+        if (this.damageTime >= 250) {
+          this.healthState = HealthState.ALIVE;
+          this.setTint(0xffffff);
+          this.damageTime = 0;
+        }
+        break;
+    }
+  }
+
   update(cursors: Phaser.Types.Input.Keyboard.CursorKeys) {
+    if (
+      this.healthState === HealthState.DAMAGE ||
+      this.healthState === HealthState.DEAD
+    ) {
+      return;
+    }
+
     if (!cursors) {
       return;
     }

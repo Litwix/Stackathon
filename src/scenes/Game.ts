@@ -11,9 +11,7 @@ export default class Game extends Phaser.Scene {
     super('game');
   }
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private rogue!: Phaser.Physics.Arcade.Sprite;
-  private facingBack = false;
-  private hit = 0;
+  private rogue!: Rogue;
 
   preload() {
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -80,18 +78,12 @@ export default class Game extends Phaser.Scene {
 
     const dx = this.rogue.x - slime.x;
     const dy = this.rogue.y - slime.y;
-    const direction = new Phaser.Math.Vector2(dx, dy).normalize().scale(200);
-    this.rogue.setVelocity(direction.x, direction.y);
-    this.hit = 1;
+    const direction = new Phaser.Math.Vector2(dx, dy).normalize().scale(100);
+
+    this.rogue.handleDamage(direction);
   }
 
   update() {
-    if (this.hit > 0) {
-      this.hit++;
-      if (this.hit > 10) this.hit = 0;
-      return;
-    }
-
     if (this.rogue) {
       this.rogue.update(this.cursors);
     }
