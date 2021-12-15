@@ -19,6 +19,15 @@ export default class GameUI extends Phaser.Scene {
     });
 
     sceneEvents.on('rogue-health-changed', this.handleRogueHealthChanged, this);
+
+    // Turn off listener after each time damage is taken to prevent buildup of unwanted listeners
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      sceneEvents.off(
+        'rogue-health-changed',
+        this.handleRogueHealthChanged,
+        this
+      );
+    });
   }
 
   private handleRogueHealthChanged(health: number) {
