@@ -11,6 +11,7 @@ export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private rogue!: Phaser.Physics.Arcade.Sprite;
   private facingBack = false;
+  private hit = 0;
 
   preload() {
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -41,22 +42,56 @@ export default class Game extends Phaser.Scene {
     this.rogue.anims.play('rogue-idle-front');
 
     // Slime Group:
-    const slimes = this.physics.add.group({ classType: Slime });
-    const slime1 = slimes.get(150, 150, 'slime');
-    slime1.body.setSize(slime1.width * 0.5, slime1.height * 0.5); // will have to refactor this later
+    const slimes = this.physics.add.group({
+      classType: Slime,
+      createCallback: (gameObject) => {
+        const slimeGameObject = gameObject as Slime;
+        slimeGameObject.body.onCollide = true;
+        slimeGameObject.body.setSize(
+          slimeGameObject.width * 0.5,
+          slimeGameObject.height * 0.5
+        );
+      },
+    });
+    slimes.get(150, 150, 'slime');
 
     // COLLIDERS:
     this.physics.add.collider(this.rogue, wallsLayer);
     this.physics.add.collider(this.rogue, groundLayer);
     this.physics.add.collider(slimes, wallsLayer);
     this.physics.add.collider(slimes, groundLayer);
-    this.physics.add.collider(this.rogue, slimes);
+    this.physics.add.collider(
+      this.rogue,
+      slimes,
+      this.handleRogueSlimeCollision,
+      undefined,
+      this
+    );
 
     // FOLLOWING CAMERA:
     this.cameras.main.startFollow(this.rogue);
   }
 
+  private handleRogueSlimeCollision(
+    character: Phaser.GameObjects.GameObject,
+    enemy: Phaser.GameObjects.GameObject
+  ) {
+    const slime = enemy as Slime;
+
+    const dx = this.rogue.x - slime.x;
+    const dy = this.rogue.y - slime.y;
+    const direction = new Phaser.Math.Vector2(dx, dy).normalize().scale(200);
+    this.rogue.setVelocity(direction.x, direction.y);
+    this.hit = 1;
+  }
+
   update() {
+    if (this.hit > 0) {
+      this.hit++;
+      if (this.hit > 10) this.hit = 0;
+      return;
+    }
+
     if (!this.cursors || !this.rogue) {
       return;
     }
