@@ -54,7 +54,9 @@ export default class Rogue extends Phaser.Physics.Arcade.Sprite {
     }
     this._health -= 0.5;
     if (this._health <= 0) {
-      /* die */
+      this.healthState = HealthState.DEAD;
+      this.anims.play('rogue-death');
+      this.setVelocity(0, 0);
     }
   }
 
