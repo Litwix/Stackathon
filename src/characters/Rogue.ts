@@ -24,6 +24,7 @@ export default class Rogue extends Phaser.Physics.Arcade.Sprite {
   private facingBack = false;
   private healthState = HealthState.ALIVE;
   private damageTime = 0;
+  private _health = 5;
 
   constructor(
     scene: Phaser.Scene,
@@ -36,14 +37,24 @@ export default class Rogue extends Phaser.Physics.Arcade.Sprite {
     this.anims.play('rogue-idle-front');
   }
 
+  // GETTERS AND SETTERS:
+  get health() {
+    return this._health;
+  }
+
   handleDamage(direction: Phaser.Math.Vector2) {
-    if (this.healthState === HealthState.DAMAGE) return;
+    if (this._health <= 0) return; // check first if dead to avoid repeated death logic/animations
+    if (this.healthState === HealthState.DAMAGE) return; // check to avoid continuous damage in certain span time
     this.setVelocity(direction.x, direction.y);
     this.setTint(0xff0000);
     this.healthState = HealthState.DAMAGE;
     this.damageTime = 0;
     if (!this.facingBack) {
       this.anims.play('rogue-damage', true);
+    }
+    this._health -= 0.5;
+    if (this._health <= 0) {
+      /* die */
     }
   }
 

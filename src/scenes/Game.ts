@@ -5,6 +5,7 @@ import Rogue from '../characters/Rogue';
 import Slime from '../characters/Slime';
 import { createRogueAnims } from '../animations/RogueAnims';
 import { createSlimeAnims } from '../animations/SlimeAnims';
+import { sceneEvents } from '../events/Events';
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -83,6 +84,8 @@ export default class Game extends Phaser.Scene {
     const direction = new Phaser.Math.Vector2(dx, dy).normalize().scale(100);
 
     this.rogue.handleDamage(direction);
+
+    sceneEvents.emit('rogue-health-changed', this.rogue.health);
   }
 
   update() {
