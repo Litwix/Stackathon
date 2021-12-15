@@ -19,6 +19,10 @@ export default class Preloader extends Phaser.Scene {
       'characters/slime/Slime.png',
       'characters/slime/Slime.json'
     );
+
+    this.load.image('heart-empty', 'ui/health/heart-empty.png');
+    this.load.image('heart-full', 'ui/health/heart-full.png');
+    this.load.image('heart-half', 'ui/health/heart-half.png');
   }
 
   create() {
