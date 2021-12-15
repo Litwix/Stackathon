@@ -1,8 +1,10 @@
 import Phaser from 'phaser';
 import { debugDraw } from '../utils/debug';
+import '../characters/Rogue';
+import Rogue from '../characters/Rogue';
+import Slime from '../characters/Slime';
 import { createRogueAnims } from '../animations/RogueAnims';
 import { createSlimeAnims } from '../animations/SlimeAnims';
-import Slime from '../characters/Slime';
 
 export default class Game extends Phaser.Scene {
   constructor() {
@@ -37,8 +39,7 @@ export default class Game extends Phaser.Scene {
 
     // CHARACTERS:
     // Rogue Character:
-    this.rogue = this.physics.add.sprite(73, 50, 'rogue', 'idleFront-1.png');
-    this.rogue.body.setSize(this.rogue.width * 0.4, this.rogue.height * 0.6);
+    this.rogue = this.add.rogue(73, 50, 'rogue');
 
     // Slime Group:
     const slimes = this.physics.add.group({
