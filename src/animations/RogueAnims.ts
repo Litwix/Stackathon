@@ -65,6 +65,18 @@ const createRogueAnims = (anims: Phaser.Animations.AnimationManager) => {
     repeat: -1,
     frameRate: 10,
   });
+
+  // Animation for dying:
+  anims.create({
+    key: 'rogue-death',
+    frames: anims.generateFrameNames('rogue', {
+      start: 1,
+      end: 5,
+      prefix: 'death-',
+      suffix: '.png',
+    }),
+    frameRate: 10,
+  });
 };
 
 export { createRogueAnims };
