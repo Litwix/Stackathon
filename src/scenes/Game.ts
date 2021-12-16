@@ -10,6 +10,8 @@ import { sceneEvents } from '../events/Events';
 export default class Game extends Phaser.Scene {
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
   private rogue!: Rogue;
+  private knives!: Phaser.Physics.Arcade.Group;
+  private slimes!: Phaser.Physics.Arcade.Group;
   private rogueSlimeCollider?: Phaser.Physics.Arcade.Collider;
 
   constructor() {
@@ -40,12 +42,19 @@ export default class Game extends Phaser.Scene {
     createRogueAnims(this.anims);
     createSlimeAnims(this.anims);
 
+    // KNIVES:
+    this.knives = this.physics.add.group({
+      classType: Phaser.Physics.Arcade.Image,
+      maxSize: 3,
+    });
+
     // CHARACTERS:
     // Rogue Character:
     this.rogue = this.add.rogue(73, 50, 'rogue');
+    this.rogue.setKnives(this.knives);
 
     // Slime Group:
-    const slimes = this.physics.add.group({
+    this.slimes = this.physics.add.group({
       classType: Slime,
       createCallback: (gameObject) => {
         const slimeGameObject = gameObject as Slime;
@@ -56,21 +65,45 @@ export default class Game extends Phaser.Scene {
         );
       },
     });
-    slimes.get(150, 150, 'slime');
-    slimes.get(500, 100, 'slime');
-    slimes.get(700, 300, 'slime');
-    slimes.get(100, 500, 'slime');
-    slimes.get(300, 700, 'slime');
-    slimes.get(200, 400, 'slime');
+    this.slimes.get(150, 150, 'slime');
+    this.slimes.get(500, 100, 'slime');
+    this.slimes.get(700, 300, 'slime');
+    this.slimes.get(100, 500, 'slime');
+    this.slimes.get(300, 700, 'slime');
+    this.slimes.get(200, 400, 'slime');
 
     // COLLIDERS:
     this.physics.add.collider(this.rogue, wallsLayer);
     this.physics.add.collider(this.rogue, groundLayer);
-    this.physics.add.collider(slimes, wallsLayer);
-    this.physics.add.collider(slimes, groundLayer);
+
+    this.physics.add.collider(this.slimes, wallsLayer);
+    this.physics.add.collider(this.slimes, groundLayer);
+
+    this.physics.add.collider(
+      this.knives,
+      wallsLayer,
+      this.handleKnifeWallCollision,
+      undefined,
+      this
+    );
+    this.physics.add.collider(
+      this.knives,
+      groundLayer,
+      this.handleKnifeWallCollision,
+      undefined,
+      this
+    );
+    this.physics.add.collider(
+      this.knives,
+      this.slimes,
+      this.handleKnifeSlimeCollision,
+      undefined,
+      this
+    );
+
     this.rogueSlimeCollider = this.physics.add.collider(
       this.rogue,
-      slimes,
+      this.slimes,
       this.handleRogueSlimeCollision,
       undefined,
       this
@@ -78,6 +111,21 @@ export default class Game extends Phaser.Scene {
 
     // FOLLOWING CAMERA:
     this.cameras.main.startFollow(this.rogue);
+  }
+
+  private handleKnifeWallCollision(
+    knife: Phaser.GameObjects.GameObject,
+    wall: Phaser.GameObjects.GameObject
+  ) {
+    knife.destroy();
+  }
+
+  private handleKnifeSlimeCollision(
+    knife: Phaser.GameObjects.GameObject,
+    slime: Phaser.GameObjects.GameObject
+  ) {
+    knife.destroy();
+    slime.destroy();
   }
 
   private handleRogueSlimeCollision(
