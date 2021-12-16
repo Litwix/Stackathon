@@ -8,11 +8,13 @@ import { createSlimeAnims } from '../animations/SlimeAnims';
 import { sceneEvents } from '../events/Events';
 
 export default class Game extends Phaser.Scene {
+  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
+  private rogue!: Rogue;
+  private rogueSlimeCollider?: Phaser.Physics.Arcade.Collider;
+
   constructor() {
     super('game');
   }
-  private cursors!: Phaser.Types.Input.Keyboard.CursorKeys;
-  private rogue!: Rogue;
 
   preload() {
     this.cursors = this.input.keyboard.createCursorKeys();
@@ -66,7 +68,7 @@ export default class Game extends Phaser.Scene {
     this.physics.add.collider(this.rogue, groundLayer);
     this.physics.add.collider(slimes, wallsLayer);
     this.physics.add.collider(slimes, groundLayer);
-    this.physics.add.collider(
+    this.rogueSlimeCollider = this.physics.add.collider(
       this.rogue,
       slimes,
       this.handleRogueSlimeCollision,
@@ -91,6 +93,10 @@ export default class Game extends Phaser.Scene {
     this.rogue.handleDamage(direction);
 
     sceneEvents.emit('rogue-health-changed', this.rogue.health);
+
+    if (this.rogue.health <= 0) {
+      this.rogueSlimeCollider?.destroy();
+    }
   }
 
   update() {
