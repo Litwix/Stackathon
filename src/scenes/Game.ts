@@ -55,6 +55,11 @@ export default class Game extends Phaser.Scene {
       },
     });
     slimes.get(150, 150, 'slime');
+    slimes.get(500, 100, 'slime');
+    slimes.get(700, 300, 'slime');
+    slimes.get(100, 500, 'slime');
+    slimes.get(300, 700, 'slime');
+    slimes.get(200, 400, 'slime');
 
     // COLLIDERS:
     this.physics.add.collider(this.rogue, wallsLayer);
